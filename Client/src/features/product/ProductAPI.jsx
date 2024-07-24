@@ -20,16 +20,18 @@ export function fetchAllPorductsByFilter(filter, sort, pagination) {
   for (let key in sort) {
     queryString += `${key}=${sort[key]}&`
   }
-  console.log(pagination);
+  // console.log(pagination);
   for (let key in pagination) {
     queryString += `${key}=${pagination[key]}&`
   }
   return new Promise(async (resolve) => {
-    console.log("Q : ",queryString);  
+    // console.log("Q : ",queryString);  
     const response = await fetch('http://localhost:8080/products?'+queryString)
     let data = await response.json();
+    const totalItems = data.items;
+    // console.log("Product items",data.items);
     console.log("Product data",data);
     data = data.data;
-    resolve({ data })
+    resolve({ data:{products:data,totalItems:+totalItems} })
   });
 }

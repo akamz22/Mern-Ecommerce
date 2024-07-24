@@ -13,6 +13,7 @@ import {
   fetchAllPorductsByFilterAsync,
   fetchAllProductsAsync,
   selectAllProducts,
+  selectTotalitems,
 } from '../ProductSlice';
 
 
@@ -104,12 +105,12 @@ function classNames(...classes) {
 export default function ProductList() {
   const dispatch = useDispatch();
   const products = useSelector(selectAllProducts);
-  console.log("PRO : ",products.data);
+  const totalItems = useSelector(selectTotalitems)
+  // console.log("PRO : ",products.data);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [filter, setFilter] = useState({})
   const [sort, setSort] = useState({})
   const [page, setPage] = useState(1)
-
 
   // {TODO Pagination http://localhost:8080/products?_page=1&_limit=10}
 
@@ -119,12 +120,12 @@ export default function ProductList() {
     if (e.target.checked) {
       if (newFilter[section.id]) {
         newFilter[section.id].push(option.value);
-      }else{
+      } else {
         newFilter[section.id] = [option.value]
       }
     } else {
       const index = newFilter[section.id]?.findIndex(el => el === option.value)
-      newFilter[section.id].splice(index,1);
+      newFilter[section.id].splice(index, 1);
     }
     setFilter(newFilter)
     // dispatch(fetchAllPorductsByFilterAsync(newFilter))
@@ -133,19 +134,23 @@ export default function ProductList() {
 
   const handleSort = (e, option) => {
     const sort = { _sort: option.sort, _order: option.order }
-    console.log(sort);
+    // console.log(sort);
     setSort(sort);
   }
   const handlePage = (page) => {
-    console.log({page});
+    // console.log({page});
     setPage(page);
   }
 
   useEffect(() => {
-    const pagination = {_page:page,_per_page:ITEMS_PER_PAGE}
+    const pagination = { _page: page, _per_page: ITEMS_PER_PAGE }
     // dispatch(fetchAllProductsAsync(filter))
-    dispatch(fetchAllPorductsByFilterAsync({ filter, sort ,pagination}))
-  }, [dispatch, filter, sort,page])
+    dispatch(fetchAllPorductsByFilterAsync({ filter, sort, pagination }))
+  }, [dispatch, filter, sort, page])
+
+  useEffect(()=>{
+    setPage(1)
+  },[totalItems,sort])
 
   return (
     <div>
@@ -246,9 +251,10 @@ export default function ProductList() {
 
             </section>
             {/* Pagination */}
-            <Pagination page ={page}
-            setPage={setPage}
-            handlePage={handlePage}/>
+            <Pagination page={page}
+              setPage={setPage}
+              handlePage={handlePage}
+              totalItems={totalItems} />
           </main>
         </div>
       </div>
@@ -416,42 +422,38 @@ const ProductGrid = ({ products }) => {
 
         <div className="mt-6 grid  grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {
-            
-            console.log("Pro Api: " + products)
-          }
-          {
-          products?.map((product) => (
-            <Link to="/product-details">
-              <div key={product.id} className="group relative shadow-md p-2 h-full hover:scale-105 transition-all">
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-64">
-                  <img
-                    src={product.thumbnail}
-                    alt={product.title}
-                    className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                  />
-                </div>
-                <div className="mt-4 flex justify-between">
-                  <div>
-                    <h3 className="text-sm text-gray-700">
-                      <a href={product.thumbnail}>
-                        <span aria-hidden="true" className="absolute inset-0" />
-                        {product.title}
-                      </a>
-                    </h3>
-                    {/* <Rating value={4} readonly /> */}
-                    <div className="mt-1 text-sm text-gray-500">
-                      <span className='aligh-bottom'>{product.rating} </span>
-                      <StarIcon className='h-6 w-6 inline align-bottom text-yellow-500'></StarIcon>
+            products?.map((product) => (
+              <Link to="/product-details">
+                <div key={product.id} className="group relative shadow-md p-2 h-full hover:scale-105 transition-all">
+                  <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-64">
+                    <img
+                      src={product.thumbnail}
+                      alt={product.title}
+                      className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                    />
+                  </div>
+                  <div className="mt-4 flex justify-between">
+                    <div>
+                      <h3 className="text-sm text-gray-700">
+                        <a href={product.thumbnail}>
+                          <span aria-hidden="true" className="absolute inset-0" />
+                          {product.title}
+                        </a>
+                      </h3>
+                      {/* <Rating value={4} readonly /> */}
+                      <div className="mt-1 text-sm text-gray-500">
+                        <span className='aligh-bottom'>{product.rating} </span>
+                        <StarIcon className='h-6 w-6 inline align-bottom text-yellow-500'></StarIcon>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">${Math.round(product.price * (1 - product.discountPercentage / 100))}</p>
+                      <p className="text-sm line-through font-medium text-gray-400">${product.price}</p>
                     </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">${Math.round(product.price * (1 - product.discountPercentage / 100))}</p>
-                    <p className="text-sm line-through font-medium text-gray-400">${product.price}</p>
-                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
         </div>
       </div>
     </div>
@@ -459,7 +461,7 @@ const ProductGrid = ({ products }) => {
 }
 
 
-const Pagination = ({page ,setPage,handlePage,totalItems=55}) => {
+const Pagination = ({ page, setPage, handlePage, totalItems }) => {
   return (
     <div>
       <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
@@ -480,8 +482,13 @@ const Pagination = ({page ,setPage,handlePage,totalItems=55}) => {
         <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
           <div>
             <p className="text-sm text-gray-700">
-              Showing <span className="font-medium">{(page-1)*ITEMS_PER_PAGE +1}</span> to {' '}
-              <span className="font-medium">{page*ITEMS_PER_PAGE}</span> of {' '}
+              Showing <span className="font-medium">{(page - 1) * ITEMS_PER_PAGE + 1}</span> to {' '}
+              <span className="font-medium">
+                {
+                  page * ITEMS_PER_PAGE > totalItems
+                  ? totalItems
+                  : page * ITEMS_PER_PAGE
+                }</span> of {' '}
               <span className="font-medium">{totalItems}</span> results
             </p>
           </div>
@@ -495,21 +502,21 @@ const Pagination = ({page ,setPage,handlePage,totalItems=55}) => {
                 <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
               </a>
               {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-             {Array.from({length:Math.ceil(totalItems/ITEMS_PER_PAGE)}).map((ele,index)=>(
+              {Array.from({ length: Math.ceil(totalItems / ITEMS_PER_PAGE) }).map((ele, index) => (
 
-               <div
-               key={index*4}
-                 onClick={()=>handlePage(index+1)}
-                 aria-current="page"
-                 className={`relative cursor-pointer z-10 inline-flex items-center ${index+1===page?'bg-indigo-600 text-white': 
-                  'bg-white text-gray-400'} px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
-               >
-                 {index+1}
-               </div>
-          
-             ))
+                <div
+                  key={index * 4}
+                  onClick={() => handlePage(index + 1)}
+                  aria-current="page"
+                  className={`relative cursor-pointer z-10 inline-flex items-center ${index + 1 === page ? 'bg-indigo-600 text-white' :
+                    'bg-white text-gray-400'} px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                >
+                  {index + 1}
+                </div>
 
-             }
+              ))
+
+              }
               <a
                 href="#"
                 className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
