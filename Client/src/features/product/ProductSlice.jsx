@@ -1,10 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchAllPorducts,fetchAllPorductsByFilter } from './ProductAPI';
+import { fetchAllPorducts,fetchAllPorductsByFilter,fetchCategories,fetchBrands,fetchProductById } from './ProductAPI';
 
 const initialState = {
   products: [],
+  brands: [],
+  categories: [],
   status: 'idle',
-  totalItems:0
+  totalItems:0,
+  selectedProduct:null
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -22,11 +25,42 @@ export const fetchAllProductsAsync = createAsyncThunk(
 );
 
 
+export const fetchAllProductByIdAsync = createAsyncThunk(
+  'product/fetchProductById',
+  async (id) => {
+    const response = await fetchProductById(id);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+
+
+
 
 export const fetchAllPorductsByFilterAsync = createAsyncThunk(
   'product/fetchAllPorductsByFilter',
   async ({filter,sort,pagination}) => {
     const response = await fetchAllPorductsByFilter(filter,sort,pagination);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+
+
+
+export const fetchBrandsAsync = createAsyncThunk(
+  'product/fetchBrands',
+  async () => {
+    const response = await fetchBrands();
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+
+export const fetchCategoriesAsync = createAsyncThunk(
+  'product/fetchCategories',
+  async () => {
+    const response = await fetchCategories();
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -72,7 +106,28 @@ export const productSlice = createSlice({
         state.status = 'idle';
         state.products = action.payload.products;
         state.totalItems = action.payload.totalItems;
-      });
+      })
+      .addCase(fetchBrandsAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchBrandsAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.brands = action.payload;
+      })
+      .addCase(fetchCategoriesAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchCategoriesAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.categories = action.payload;
+      })
+      .addCase(fetchAllProductByIdAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchAllProductByIdAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.selectedProduct = action.payload;
+      })
   },
 });
 
@@ -83,6 +138,10 @@ export const { increment, decrement, incrementByAmount } = productSlice.actions;
 // in the slice file. For example: `useSelector((state: RootState) => state.product.value)`
 export const selectAllProducts = (state) => state.product.products;
 export const selectTotalitems = (state) => state.product.totalItems;
+export const selectCategories = (state) => state.product.categories;
+export const selectBrands = (state) => state.product.brands;
+export const selectProductById = (state) => state.product.selectedProduct;
+
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.

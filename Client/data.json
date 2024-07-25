@@ -6009,7 +6009,188 @@
             "thumbnail": "https://cdn.dummyjson.com/products/images/mobile-accessories/Apple%20Airpods/thumbnail.png"
         }
     ],
-    "total": 194,
-    "skip": 0,
-    "limit": 100
+    "brands": [
+        {
+            "value": "essence",
+            "label": "Essence",
+            "checked": false
+        },
+        {
+            "value": "glamour_beauty",
+            "label": "Glamour Beauty",
+            "checked": false
+        },
+        {
+            "value": "velvet_touch",
+            "label": "Velvet Touch",
+            "checked": false
+        },
+        {
+            "value": "chic_cosmetics",
+            "label": "Chic Cosmetics",
+            "checked": false
+        },
+        {
+            "value": "nail_couture",
+            "label": "Nail Couture",
+            "checked": false
+        },
+        {
+            "value": "calvin_klein",
+            "label": "Calvin Klein",
+            "checked": false
+        },
+        {
+            "value": "chanel",
+            "label": "Chanel",
+            "checked": false
+        },
+        {
+            "value": "dior",
+            "label": "Dior",
+            "checked": false
+        },
+        {
+            "value": "dolce_gabbana",
+            "label": "Dolce & Gabbana",
+            "checked": false
+        },
+        {
+            "value": "gucci",
+            "label": "Gucci",
+            "checked": false
+        },
+        {
+            "value": "annibale_colombo",
+            "label": "Annibale Colombo",
+            "checked": false
+        },
+        {
+            "value": "furniture_co",
+            "label": "Furniture Co.",
+            "checked": false
+        },
+        {
+            "value": "knoll",
+            "label": "Knoll",
+            "checked": false
+        },
+        {
+            "value": "bath_trends",
+            "label": "Bath Trends",
+            "checked": false
+        },
+        {
+            "value": "apple",
+            "label": "Apple",
+            "checked": false
+        },
+        {
+            "value": "asus",
+            "label": "Asus",
+            "checked": false
+        },
+        {
+            "value": "huawei",
+            "label": "Huawei",
+            "checked": false
+        },
+        {
+            "value": "lenovo",
+            "label": "Lenovo",
+            "checked": false
+        },
+        {
+            "value": "dell",
+            "label": "Dell",
+            "checked": false
+        },
+        {
+            "value": "fashion_trends",
+            "label": "Fashion Trends",
+            "checked": false
+        },
+        {
+            "value": "gigabyte",
+            "label": "Gigabyte",
+            "checked": false
+        },
+        {
+            "value": "fashion_timepieces",
+            "label": "Fashion Timepieces",
+            "checked": false
+        },
+        {
+            "value": "longines",
+            "label": "Longines",
+            "checked": false
+        },
+        {
+            "value": "rolex",
+            "label": "Rolex",
+            "checked": false
+        },
+        {
+            "value": "amazon",
+            "label": "Amazon",
+            "checked": false
+        }
+    ],
+    "categories": [
+        {
+            "value": "beauty",
+            "label": "Beauty",
+            "checked": false
+        },
+        {
+            "value": "fragrances",
+            "label": "Fragrances",
+            "checked": false
+        },
+        {
+            "value": "furniture",
+            "label": "Furniture",
+            "checked": false
+        },
+        {
+            "value": "groceries",
+            "label": "Groceries",
+            "checked": false
+        },
+        {
+            "value": "home_decoration",
+            "label": "Home Decoration",
+            "checked": false
+        },
+        {
+            "value": "kitchen_accessories",
+            "label": "Kitchen Accessories",
+            "checked": false
+        },
+        {
+            "value": "laptops",
+            "label": "Laptops",
+            "checked": false
+        },
+        {
+            "value": "mens_shirts",
+            "label": "Mens Shirts",
+            "checked": false
+        },
+        {
+            "value": "mens_shoes",
+            "label": "Mens Shoes",
+            "checked": false
+        },
+        {
+            "value": "mens_watches",
+            "label": "Mens Watches",
+            "checked": false
+        },
+        {
+            "value": "mobile_accessories",
+            "label": "Mobile Accessories",
+            "checked": false
+        }
+    ]
 }
